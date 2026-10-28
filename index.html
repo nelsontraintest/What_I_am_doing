@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What I Am Working On — Live Work Log</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Top Header -->
+    <header class="header">
+      <div class="header-main">
+        <div>
+          <div class="eyebrow">LIVE WORKLOAD &amp; PRIORITY BOARD</div>
+          <h1 id="boardTitle">My Work Log &amp; Queue</h1>
+          <p id="boardSubtitle" class="subtitle">
+            Live view of projects, daily mini-tasks inside them, queue order, and long-term reminders.
+          </p>
+        </div>
+        <div class="header-actions">
+          <span id="lastUpdatedText" class="last-updated">Updated just now</span>
+          <a class="btn btn-secondary" href="manual.html" title="How to use this board">
+            📖 Manual
+          </a>
+          <button id="toggleEditBtn" class="btn btn-outline" type="button">
+            ✏️ Manage / Record Work
+          </button>
+        </div>
+      </div>
+
+      <!-- Current Status & Bandwidth Split Card -->
+      <div class="summary-card">
+        <div class="capacity-row">
+          <div class="capacity-badge-wrap">
+            <span class="section-label">CURRENT BANDWIDTH:</span>
+            <span id="capacityBadge" class="capacity-badge busy">At Capacity</span>
+            <span id="capacityNote" class="capacity-note"></span>
+          </div>
+          <div class="stats-pills" id="quickStats"></div>
+        </div>
+
+        <div class="split-section">
+          <div class="split-header">
+            <span class="section-label">ACTIVE WORKLOAD SPLIT BY REQUESTER (DOING + UP NEXT + BLOCKED)</span>
+            <span id="totalActiveCount" class="split-total">0 active items</span>
+          </div>
+          <div id="workloadBar" class="workload-bar"></div>
+          <div id="workloadLegend" class="workload-legend"></div>
+        </div>
+      </div>
+
+      <!-- Alert Banner if any Long-Term Scheduled task is within 30 days or overdue -->
+      <div id="dueSoonBanner" class="due-soon-banner hidden"></div>
+    </header>
+
+    <!-- Edit Mode Toolbar & Quick Record Form (Hidden in Read-Only Boss View) -->
+    <section id="editPanel" class="edit-panel hidden">
+      <div class="edit-panel-header">
+        <div>
+          <h2>Record &amp; Manage Your Work</h2>
+          <p class="edit-hint">
+            Changes save automatically in your browser. <strong>Ctrl+Z</strong> undoes (50 steps). <strong>Ctrl+Shift+Z</strong> redoes. On a Mac, <strong>⌘Z</strong> and <strong>⌘Shift+Z</strong> do the same. Click <strong>Publish to GitHub</strong> (or download <code>data.json</code>) so your bosses see the latest version.
+          </p>
+        </div>
+        <div class="publish-actions">
+          <button id="openSettingsBtn" class="btn btn-sm btn-secondary" type="button">
+            ⚙️ Boss Names &amp; Status
+          </button>
+          <button id="shareUrlBtn" class="btn btn-sm btn-secondary" type="button" title="Copy a link with all current data embedded in the URL">
+            🔗 Copy Snapshot Link
+          </button>
+          <button id="downloadJsonBtn" class="btn btn-sm btn-secondary" type="button" title="Download data.json to commit to GitHub">
+            📥 Download data.json
+          </button>
+          <button id="githubSyncBtn" class="btn btn-sm btn-primary" type="button">
+            🚀 Publish to GitHub
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Add Task Form -->
+      <form id="taskForm" class="task-form">
+        <input type="hidden" id="editingTaskId" value="" />
+        <div class="form-grid">
+          <div class="form-group form-group-wide">
+            <label for="taskTitle">What are you doing / asked to do? *</label>
+            <input
+              type="text"
+              id="taskTitle"
+              placeholder="e.g., Prepare Q4 sales report, Renew SSL cert in 2 years..."
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="taskBoss">Who asked for it? *</label>
+            <select id="taskBoss" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskStatus">Stage *</label>
+            <select id="taskStatus" required>
+              <option value="doing">🔥 Doing Right Now</option>
+              <option value="next" selected>📋 Up Next (Queue)</option>
+              <option value="blocked">🚧 Blocked / Waiting</option>
+              <option value="scheduled">🕰️ Future / Long-Term (e.g. 1–2 Years Later)</option>
+              <option value="done">✅ Done</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskPriority">Priority</label>
+            <select id="taskPriority">
+              <option value="Urgent">🔴 Urgent</option>
+              <option value="High">🟠 High</option>
+              <option value="Normal" selected>🔵 Normal</option>
+              <option value="Low">⚪ Low</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskEta">ETA / Effort</label>
+            <input
+              type="text"
+              id="taskEta"
+              placeholder="e.g., Today 5pm, ~1 day"
+            />
+          </div>
+
+          <!-- Extra Fields for Long-Term / Scheduled Tasks (1-2 Years Later) -->
+          <div id="futureFieldsWrap" class="future-fields-wrap form-group-full hidden">
+            <div class="future-fields-header">
+              <span>🛡️ <strong>Long-Term Memory &amp; Reminder Setup</strong> (Answers: <em>"How will you remember &amp; still know how to do this 2 years later?"</em>)</span>
+            </div>
+            <div class="future-fields-grid">
+              <div class="form-group">
+                <label for="taskDueDate">Target Date (When to trigger) *</label>
+                <div class="date-quick-row">
+                  <input type="date" id="taskDueDate" />
+                  <button type="button" class="btn-chip js-date-preset" data-months="6">+6m</button>
+                  <button type="button" class="btn-chip js-date-preset" data-months="12">+1yr</button>
+                  <button type="button" class="btn-chip js-date-preset" data-months="24">+2yr</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="taskTriggerPlan">How You Will Be Reminded (Guarantee)</label>
+                <input
+                  type="text"
+                  id="taskTriggerPlan"
+                  value="GitHub Repo + Calendar Alarm (30d & 7d advance alert)"
+                  placeholder="e.g., Calendar Alarm + Auto-surfaces 30d before due"
+                />
+              </div>
+              <div class="form-group form-group-full">
+                <label for="taskRunbook">How to Do It / Context for Future You (Steps, Links, Commands so you don't forget how)</label>
+                <input
+                  type="text"
+                  id="taskRunbook"
+                  placeholder="e.g., 1. Run script X -> 2. Contact vendor Y -> 3. See doc link..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group form-group-full">
+            <label for="taskNote">Short Note / Blocker Reason (Optional — keep it 1 sentence)</label>
+            <div class="note-submit-row">
+              <input
+                type="text"
+                id="taskNote"
+                placeholder="e.g., Waiting on Boss B for API access, or Will start after current task..."
+              />
+              <div class="form-buttons">
+                <button type="button" id="cancelEditTaskBtn" class="btn btn-secondary hidden">
+                  Cancel
+                </button>
+                <button type="submit" id="saveTaskBtn" class="btn btn-primary">
+                  + Add Task
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Boss Filter Tabs -->
+    <div class="filter-bar">
+      <div class="filter-tabs" id="bossFilters"></div>
+      <div class="search-wrap">
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Filter tasks..."
+          aria-label="Filter tasks"
+        />
+      </div>
+    </div>
+
+    <!-- Main 5-Section Board -->
+    <main class="board">
+      <!-- 1. DOING RIGHT NOW -->
+      <section class="board-section section-doing">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="status-dot dot-doing"></span>
+            <h2>Doing Right Now</h2>
+            <span id="countDoing" class="count-badge">0</span>
+          </div>
+          <p class="section-desc">Active focus — each item can hold today's mini-task checklist underneath</p>
+        </div>
+        <div id="listDoing" class="task-list"></div>
+      </section>
+
+      <!-- 2. BLOCKED / WAITING -->
+      <section id="sectionBlockedWrap" class="board-section section-blocked">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="status-dot dot-blocked"></span>
+            <h2>Blocked / Waiting on Input</h2>
+            <span id="countBlocked" class="count-badge">0</span>
+          </div>
+          <p class="section-desc">Paused until I receive a decision, access, or reply</p>
+        </div>
+        <div id="listBlocked" class="task-list"></div>
+      </section>
+
+      <!-- 3. UP NEXT (PRIORITIZED QUEUE) -->
+      <section class="board-section section-next">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="status-dot dot-next"></span>
+            <h2>Up Next (In Order)</h2>
+            <span id="countNext" class="count-badge">0</span>
+          </div>
+          <p class="section-desc">Prioritized queue — I will pick these up in order (#1 first)</p>
+        </div>
+        <div id="listNext" class="task-list"></div>
+      </section>
+
+      <!-- 4. FUTURE / LONG-TERM SCHEDULED VAULT (1-2+ YEARS) -->
+      <section class="board-section section-scheduled">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="status-dot dot-scheduled"></span>
+            <h2>Future &amp; Long-Term Scheduled (Time-Capsule Vault)</h2>
+            <span id="countScheduled" class="count-badge">0</span>
+          </div>
+          <p class="section-desc">
+            Long-horizon tasks (months or 2+ years ahead) — tracked with target dates, calendar alarms &amp; step-by-step runbooks
+          </p>
+        </div>
+
+        <!-- 3-Layer Guarantee Banner for Bosses -->
+        <div class="guarantee-strip">
+          <div class="guarantee-title">🛡️ How We Guarantee Long-Term Tasks (Even 2 Years Later) Are Never Forgotten:</div>
+          <div class="guarantee-steps">
+            <span class="guarantee-pill"><strong>1. Permanent Git Record:</strong> Stored in <code>data.json</code> on GitHub, not sticky notes</span>
+            <span class="guarantee-pill"><strong>2. Dual Calendar Alarms:</strong> Send to Outlook, or download .ics for Apple Calendar (30d &amp; 7d early alerts)</span>
+            <span class="guarantee-pill"><strong>3. Future-Proof Runbook:</strong> Exact steps &amp; links saved inside the task so it can still be done years later</span>
+          </div>
+        </div>
+
+        <div id="listScheduled" class="task-list"></div>
+      </section>
+
+      <!-- 5. RECENTLY COMPLETED -->
+      <section class="board-section section-done">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="status-dot dot-done"></span>
+            <h2>Recently Completed</h2>
+            <span id="countDone" class="count-badge">0</span>
+          </div>
+          <p class="section-desc">Finished items delivered recently</p>
+        </div>
+        <div id="listDone" class="task-list"></div>
+      </section>
+    </main>
+
+    <!-- How to Read Footer for Bosses -->
+    <footer class="footer">
+      <div class="footer-guide">
+        <strong>How this board works:</strong>
+        <span>1. <strong>Board cards</strong> = projects / requests bosses care about (keep few).</span>
+        <span>2. <strong>Mini-tasks</strong> = daily small asks nested inside a card as checkboxes (do not create a new board card for each).</span>
+        <span>3. <strong>Up Next</strong> is ordered by priority (#1 first). <strong>Future Vault</strong> holds months/years-out work with calendar alarms.</span>
+        <span>4. <strong>Click</strong> a tall card to expand it. <strong>Double-click</strong> to edit. Drag the grip to reorder. <strong>Ctrl+Z</strong> undoes, <strong>Ctrl+Shift+Z</strong> redoes.</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal: Customize Bosses & Board Status -->
+  <div id="settingsModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Customize Bosses &amp; Your Status</h3>
+        <button id="closeSettingsBtn" class="icon-btn" type="button">✕</button>
+      </div>
+      <form id="settingsForm" class="modal-body">
+        <div class="form-group">
+          <label for="settingBoardTitle">Board Title</label>
+          <input type="text" id="settingBoardTitle" required />
+        </div>
+        <div class="form-group">
+          <label for="settingBoardSubtitle">Subtitle</label>
+          <input type="text" id="settingBoardSubtitle" />
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="settingCapacityStatus">Current Bandwidth Status</label>
+            <select id="settingCapacityStatus">
+              <option value="available">🟢 Available for requests</option>
+              <option value="busy">🟡 Focused / At Capacity</option>
+              <option value="overloaded">🔴 Deep Work / Urgent Fire Drill</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="settingCapacityNote">Status Note</label>
+            <input type="text" id="settingCapacityNote" placeholder="e.g., Heads-down on release..." />
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <label class="block-label">Your Bosses / Requesters</label>
+        <div id="bossConfigList" class="boss-config-list"></div>
+        <button type="button" id="addBossBtn" class="btn btn-sm btn-secondary" style="margin-top: 8px;">
+          + Add Another Boss / Stakeholder
+        </button>
+
+        <div class="modal-footer">
+          <button type="button" id="resetDefaultBtn" class="btn btn-sm btn-danger-outline">
+            Reset to Sample Data
+          </button>
+          <div style="display:flex; gap:8px;">
+            <button type="button" id="cancelSettingsBtn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Direct GitHub Publish -->
+  <div id="githubModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🚀 Publish Directly to GitHub Pages</h3>
+        <button id="closeGithubBtn" class="icon-btn" type="button">✕</button>
+      </div>
+      <form id="githubForm" class="modal-body">
+        <p class="modal-help">
+          Save your changes directly to <code>data.json</code> in your GitHub repository so your bosses immediately see the updated board at your GitHub Pages URL.
+        </p>
+        <div class="form-group">
+          <label for="ghRepo">GitHub Repository (<code>username/repo</code>) *</label>
+          <input type="text" id="ghRepo" placeholder="e.g., johndoe/show-what-i-am-doing" required />
+        </div>
+        <div class="form-group">
+          <label for="ghBranch">Branch *</label>
+          <input type="text" id="ghBranch" value="main" required />
+        </div>
+        <div class="form-group">
+          <label for="ghToken">GitHub Personal Access Token (Fine-grained with Contents: Read &amp; Write) *</label>
+          <input type="password" id="ghToken" placeholder="github_pat_..." required />
+          <small class="field-hint">
+            Stored only in your own browser's local storage. Never uploaded anywhere.
+          </small>
+        </div>
+        <div id="ghStatusMsg" class="status-msg hidden"></div>
+        <div id="ghModalFooter" class="modal-footer">
+          <button type="button" id="cancelGithubBtn" class="btn btn-secondary">Close</button>
+          <button type="submit" id="confirmGithubPushBtn" class="btn btn-primary">
+            Commit &amp; Publish Now
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

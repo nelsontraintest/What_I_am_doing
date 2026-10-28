@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Use This Board — Manual</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .manual-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .manual-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .tab-btn {
+      appearance: none;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .tab-btn:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .tab-btn[data-tab="for-bosses"].active {
+      background: #047857;
+    }
+
+    .tab-panel.hidden {
+      display: none;
+    }
+
+    .page-subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .manual-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .manual-section.for-boss {
+      border-left: 4px solid #059669;
+    }
+
+    .manual-section.for-me {
+      border-left: 4px solid #2563eb;
+    }
+
+    .manual-section h2 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .manual-section .section-lead {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .manual-section h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 18px 0 8px;
+      color: var(--text);
+    }
+
+    .manual-section p,
+    .manual-section li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .manual-section ul,
+    .manual-section ol {
+      padding-left: 20px;
+      margin: 8px 0 0;
+    }
+
+    .manual-section li {
+      margin-bottom: 6px;
+    }
+
+    .manual-section li strong {
+      color: var(--text);
+    }
+
+    .rule-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .rule-box strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .do-card,
+    .dont-card {
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+
+    .do-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+
+    .dont-card {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .do-card strong,
+    .dont-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .step-list li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 36px;
+      margin-bottom: 12px;
+    }
+
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--text);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .tag-boss {
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .tag-me {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .section-map {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .section-map-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .section-map-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .section-map-row .label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .callout {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      font-size: 13px;
+    }
+
+    .manual-footer-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    /* ===== Interactive Boss Video Player ===== */
+    .demo-player {
+      margin-top: 8px;
+      border: 1px solid #bbf7d0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #052e1c;
+      box-shadow: 0 12px 40px rgba(5, 150, 105, 0.12);
+    }
+
+    .demo-player-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: linear-gradient(180deg, #064e3b, #052e1c);
+      color: #ecfdf5;
+      flex-wrap: wrap;
+    }
+
+    .demo-player-top strong {
+      font-size: 14px;
+    }
+
+    .demo-player-top span {
+      font-size: 12px;
+      color: #a7f3d0;
+    }
+
+    .demo-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.9fr);
+      gap: 0;
+      background: #022c22;
+    }
+
+    @media (max-width: 900px) {
+      .demo-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-video-wrap {
+      position: relative;
+      background: #000;
+      min-height: 220px;
+    }
+
+    .demo-video-wrap video {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 520px;
+      background: #000;
+    }
+
+    .demo-now {
+      padding: 10px 14px;
+      background: #ecfdf5;
+      color: #064e3b;
+      border-top: 1px solid #bbf7d0;
+    }
+
+    .demo-now .now-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      color: #064e3b;
+    }
+
+    .demo-now .now-sub {
+      font-size: 12px;
+      color: #047857;
+      line-height: 1.4;
+    }
+
+    .demo-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #064e3b;
+      border-top: 1px solid rgba(167, 243, 208, 0.15);
+      flex-wrap: wrap;
+    }
+
+    .demo-controls .btn {
+      background: #10b981;
+      color: #052e1c;
+      border: none;
+    }
+
+    .demo-controls .btn:hover {
+      background: #34d399;
+    }
+
+    .demo-controls .btn-ghost {
+      background: transparent;
+      color: #ecfdf5;
+      border: 1px solid rgba(167, 243, 208, 0.35);
+    }
+
+    .demo-controls .btn-ghost:hover {
+      background: rgba(16, 185, 129, 0.15);
+    }
+
+    .demo-progress {
+      flex: 1;
+      min-width: 140px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .demo-progress > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #34d399, #a7f3d0);
+      transition: width 0.12s linear;
+    }
+
+    .demo-time {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a7f3d0;
+      font-variant-numeric: tabular-nums;
+      min-width: 78px;
+      text-align: right;
+    }
+
+    .demo-chapters {
+      padding: 12px;
+      background: #ecfdf5;
+      max-height: 520px;
+      overflow: auto;
+      border-left: 1px solid #bbf7d0;
+    }
+
+    @media (max-width: 900px) {
+      .demo-chapters {
+        border-left: none;
+        border-top: 1px solid #bbf7d0;
+        max-height: 280px;
+      }
+    }
+
+    .demo-chapters h3 {
+      margin: 0 0 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #047857;
+    }
+
+    .chapter-btn {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 8px;
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+      margin-bottom: 6px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .chapter-btn:hover {
+      border-color: #6ee7b7;
+      transform: translateY(-1px);
+    }
+
+    .chapter-btn.active {
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+      background: #f0fdf4;
+    }
+
+    .chapter-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      background: #d1fae5;
+      color: #047857;
+    }
+
+    .chapter-btn.active .chapter-num {
+      background: #059669;
+      color: #fff;
+    }
+
+    .chapter-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #064e3b;
+      line-height: 1.3;
+    }
+
+    .chapter-sub {
+      font-size: 11px;
+      color: #047857;
+      margin-top: 2px;
+      line-height: 1.35;
+      opacity: 0.85;
+    }
+
+    .demo-hint {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .demo-hint a {
+      color: #047857;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="manual-nav">
+      <div>
+        <div class="eyebrow">SIMPLE OPERATING MANUAL</div>
+        <h1>How to Use This Board</h1>
+        <p class="page-subtitle" id="pageSubtitle">Watch the walkthrough. Only this tab is for bosses.</p>
+      </div>
+      <a class="btn btn-primary" href="index.html">← Back to Live Board</a>
+    </div>
+
+    <nav class="manual-tabs" role="tablist" aria-label="Manual sections">
+      <button type="button" class="tab-btn active" role="tab" data-tab="for-bosses" aria-selected="true">For Bosses</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="for-me" aria-selected="false">For Me</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="what-goes-where" aria-selected="false">What Goes Where</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="publish" aria-selected="false">How to Publish</button>
+    </nav>
+
+    <!-- ===================== FOR BOSSES — VIDEO + INTERACTIVE UI ===================== -->
+    <section id="for-bosses" class="manual-section for-boss tab-panel" role="tabpanel">
+      <span class="tag tag-boss">FOR BOSSES</span>
+      <h2>How to Review This Board</h2>
+      <p class="section-lead">
+        Watch the demo (or click any step on the right). Green “LOOK HERE” marks the exact part to check.
+      </p>
+
+      <div class="demo-player" id="bossDemo">
+        <div class="demo-player-top">
+          <div>
+            <strong>Boss Review Walkthrough</strong>
+            <span> · ~37 seconds · click a step anytime</span>
+          </div>
+          <span id="demoStepLabel">Step 1 of 9</span>
+        </div>
+
+        <div class="demo-layout">
+          <div>
+            <div class="demo-video-wrap">
+              <video
+                id="bossReviewVideo"
+                playsinline
+                preload="metadata"
+                poster=""
+                aria-label="Boss review walkthrough video"
+              >
+                <source src="assets/boss-review-demo.webm?v=2" type="video/webm" />
+                <source src="assets/boss-review-demo.mp4?v=2" type="video/mp4" />
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
+
+            <div class="demo-now" id="demoNowPlaying">
+              <div class="now-title" id="demoNowTitle">Open the live board — just read, no editing</div>
+              <div class="now-sub" id="demoNowSub">Do not click Manage / Record Work. Scan top → bottom in about 2 minutes.</div>
+            </div>
+
+            <div class="demo-controls">
+              <button type="button" class="btn btn-sm" id="demoPlayBtn">▶ Play</button>
+              <button type="button" class="btn btn-sm btn-ghost" id="demoReplayBtn">↺ Replay</button>
+              <button type="button" class="btn btn-sm btn-ghost" id="demoPrevBtn">‹ Prev</button>
+              <button type="button" class="btn btn-sm btn-ghost" id="demoNextBtn">Next ›</button>
+              <div class="demo-progress" id="demoProgress" title="Seek">
+                <span id="demoProgressBar"></span>
+              </div>
+              <div class="demo-time" id="demoTime">0:00 / 0:37</div>
+            </div>
+          </div>
+
+          <aside class="demo-chapters" aria-label="Interactive chapters">
+            <h3>Click a part to jump</h3>
+            <div id="chapterList"></div>
+          </aside>
+        </div>
+      </div>
+
+      <p class="demo-hint">
+        After the demo, open the <a href="index.html">live board</a>.
+        Bookmark that page. You never need the Manage button.
+      </p>
+    </section>
+
+    <!-- ===================== FOR ME ===================== -->
+    <section id="for-me" class="manual-section for-me tab-panel hidden" role="tabpanel">
+      <span class="tag tag-me">FOR ME (IC)</span>
+      <h2>How to Record Work (daily habit)</h2>
+      <p class="section-lead">
+        Keep the boss-facing board clean. Record projects as cards. Record daily small asks as mini-tasks under those cards.
+      </p>
+
+      <div class="rule-box">
+        <strong>Golden rule</strong>
+        Board card = something a boss cares about as an outcome.<br />
+        Mini-task = a small step today inside that outcome. Do <em>not</em> create a new board card for every tiny request.
+      </div>
+
+      <div class="two-col">
+        <div class="do-card">
+          <strong>✓ Do</strong>
+          One card: “Fix checkout payment timeout”<br />
+          Mini-tasks under it: “Check webhook logs”, “Patch retry”, “Ask Boss B to smoke-test”
+        </div>
+        <div class="dont-card">
+          <strong>✗ Don’t</strong>
+          Four separate board cards for those same four tiny steps — the board becomes noise and bosses stop reading it.
+        </div>
+      </div>
+
+      <h3>Daily workflow</h3>
+      <ol class="step-list">
+        <li>
+          Open the live board → click <strong>✏️ Manage / Record Work</strong>.
+        </li>
+        <li>
+          First time only: click <strong>⚙️ Boss Names &amp; Status</strong> → set real boss names and your bandwidth status.
+        </li>
+        <li>
+          When a boss asks for a <strong>new project / outcome</strong> → fill the form → choose stage → <strong>+ Add Task</strong>.
+        </li>
+        <li>
+          When they ask for a <strong>small thing inside an existing project</strong> → find that card → type in <strong>Add a mini-task for today…</strong> → Enter.
+        </li>
+        <li>
+          Tick mini-tasks as you finish. Move the parent card between Doing / Up Next / Blocked / Done with the stage dropdown.
+        </li>
+        <li>
+          Reorder a stage by dragging the grip on a card, or with <strong>↑</strong> / <strong>↓</strong> while editing. Drop a card on another stage to move it. The Future vault stays in target-date order.
+        </li>
+        <li>
+          Publish so bosses see the update (see “How to publish updates” below).
+        </li>
+      </ol>
+      <p>
+        <strong>Click</strong> a card to expand a long mini-task list. <strong>Double-click</strong> a card to edit it.
+        <strong>Ctrl+Z</strong> undoes the last board change (50 steps). <strong>Ctrl+Shift+Z</strong> redoes.
+        On a Mac, <strong>⌘Z</strong> and <strong>⌘Shift+Z</strong> do the same. Typing in a text field keeps the normal text undo.
+      </p>
+
+      <h3>Which stage should I use?</h3>
+      <div class="section-map">
+        <div class="section-map-row">
+          <div class="label">🔥 Doing</div>
+          <div>Hands-on now. Keep to 1–2 cards so you finish, not thrash.</div>
+        </div>
+        <div class="section-map-row">
+          <div class="label">📋 Up Next</div>
+          <div>Queued and ordered. Default for new asks that are not urgent start-today.</div>
+        </div>
+        <div class="section-map-row">
+          <div class="label">🚧 Blocked</div>
+          <div>Waiting on someone else. Write the blocker in the note (who / what).</div>
+        </div>
+        <div class="section-map-row">
+          <div class="label">🕰️ Future Vault</div>
+          <div>Months or years later. Add Target Date (+6m / +1yr / +2yr), reminder plan, and runbook steps. Then download .ics or Send to Outlook.</div>
+        </div>
+        <div class="section-map-row">
+          <div class="label">✅ Done</div>
+          <div>Finished. Leaves a short proof trail for bosses.</div>
+        </div>
+      </div>
+
+      <h3>Long-term tasks (the “2 years later” question)</h3>
+      <ol>
+        <li>Stage = <strong>Future / Long-Term</strong></li>
+        <li>Set Target Date (use <strong>+2yr</strong> if needed)</li>
+        <li>Write <strong>How to Do It (Runbook)</strong> so future-you still knows the steps</li>
+        <li>Click <strong>Download Calendar Alarm (.ics)</strong> or <strong>Send to Outlook</strong></li>
+      </ol>
+      <p>
+        When the due date is within 30 days, the board shows a yellow wake-up banner and a button to move it into Up Next.
+      </p>
+    </section>
+
+    <!-- ===================== WHAT GOES WHERE ===================== -->
+    <section id="what-goes-where" class="manual-section tab-panel hidden" role="tabpanel">
+      <h2>What Goes Where? (cheat sheet)</h2>
+      <p class="section-lead">Use this when you are unsure whether to create a card or a mini-task.</p>
+
+      <div class="section-map">
+        <div class="section-map-row">
+          <div class="label">New board card</div>
+          <div>“Build the Q4 usage export”, “Fix production checkout timeout”, “Renew SSL in 2028”</div>
+        </div>
+        <div class="section-map-row">
+          <div class="label">Mini-task under card</div>
+          <div>“Pull CSV”, “Remove duplicates”, “Send draft to Boss A”, “Ask IT for DB access”</div>
+        </div>
+        <div class="section-map-row">
+          <div class="label">Blocked note</div>
+          <div>“Waiting on Boss C for vendor contact”, “Need read-only DB credentials from IT”</div>
+        </div>
+        <div class="section-map-row">
+          <div class="label">Future Vault</div>
+          <div>Anything due after the current sprint/quarter that must not be forgotten</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PUBLISH ===================== -->
+    <section id="publish" class="manual-section for-me tab-panel hidden" role="tabpanel">
+      <span class="tag tag-me">FOR ME</span>
+      <h2>How to Publish Updates So Bosses See Them</h2>
+      <p class="section-lead">
+        Edits first save in your browser. Pick one method below so bosses see the same board on their computers.
+      </p>
+
+      <ol class="step-list">
+        <li>
+          <strong>🚀 Publish to GitHub</strong> (best daily habit) — needs a Fine-grained Personal Access Token with Contents: Read &amp; Write for this repo. Click once after you update.
+        </li>
+        <li>
+          <strong>📥 Download data.json</strong> — replace the file in the repo and commit if you prefer Git manually.
+        </li>
+        <li>
+          <strong>🔗 Copy Snapshot Link</strong> — paste into Slack / Teams / email when you need a quick share without committing.
+        </li>
+      </ol>
+
+      <div class="callout">
+        After GitHub publish, wait about 30–60 seconds, then refresh the GitHub Pages URL. That is what bosses should bookmark.
+      </div>
+    </section>
+
+    <footer class="footer" id="manualFooter">
+      <div class="manual-footer-links">
+        <a class="btn btn-primary" href="index.html">Open Live Board</a>
+      </div>
+      <p id="footerTip" style="margin-top: 14px;">
+        Send bosses this link: <code>manual.html#for-bosses</code>. They only see this tab.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const FALLBACK_CHAPTERS = [
+        { id: "intro", start: 0.0, title: "Open the live board — just read, no editing", subtitle: "Do not click Manage / Record Work. Scan top → bottom in about 2 minutes." },
+        { id: "bandwidth", start: 3.2, title: "1 · Current Bandwidth", subtitle: "Available, Focused, or Fire drill — know capacity before asking for more work." },
+        { id: "split", start: 7.2, title: "2 · Workload Split Bar", subtitle: "See how active work is split across Boss A / B / C. You share this bandwidth." },
+        { id: "filters", start: 11.7, title: "3 · Filter by your name", subtitle: "Optional: click your boss tab to hide other teams and see only your requests." },
+        { id: "doing", start: 15.2, title: "4 · Doing Right Now", subtitle: "Active focus today — kept to 1–2 items so delivery finishes faster." },
+        { id: "card", start: 19.2, title: "5 · Read one work card", subtitle: "Boss tag · Priority · Mini progress · Title · ETA. One glance = full status." },
+        { id: "blocked", start: 23.7, title: "6 · Blocked / Waiting", subtitle: "Paused for access, decision, or reply. If it is you — answer to unblock." },
+        { id: "queue", start: 27.7, title: "7 · Up Next (#1 is next)", subtitle: "Need yours sooner? Ask to swap with #1 — not “are you free?”" },
+        { id: "outro", start: 32.7, title: "8 · Future Vault, then Recently Completed", subtitle: "Long-term work has a date and alarm. The Done row is proof it was delivered." }
+      ];
+
+      const TABS = ["for-bosses", "for-me", "what-goes-where", "publish"];
+      const TAB_COPY = {
+        "for-bosses": {
+          subtitle: "Watch the walkthrough. This tab shows only the review demo.",
+          tip: "Send bosses this link: manual.html#for-bosses. They only see this tab."
+        },
+        "for-me": {
+          subtitle: "Your daily habit for recording work. Bosses do not see this tab.",
+          tip: "Keep board cards few. Put today’s small asks under the matching card."
+        },
+        "what-goes-where": {
+          subtitle: "Quick cheat sheet: board card vs mini-task.",
+          tip: "If a boss would ask “is this done?”, it is a board card. If it is a step today, it is a mini-task."
+        },
+        publish: {
+          subtitle: "How your updates reach the live board bosses already bookmarked.",
+          tip: "Publish after you change the board, then wait about 30–60 seconds."
+        }
+      };
+
+      const pageSubtitle = document.getElementById("pageSubtitle");
+      const footerTip = document.getElementById("footerTip");
+
+      function showTab(id, updateHash) {
+        const tabId = TABS.indexOf(id) >= 0 ? id : "for-bosses";
+        document.querySelectorAll(".tab-panel").forEach((panel) => {
+          panel.classList.toggle("hidden", panel.id !== tabId);
+        });
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          const on = btn.dataset.tab === tabId;
+          btn.classList.toggle("active", on);
+          btn.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        const copy = TAB_COPY[tabId];
+        pageSubtitle.textContent = copy.subtitle;
+        footerTip.textContent = copy.tip;
+        if (tabId !== "for-bosses" && video && !video.paused) {
+          video.pause();
+          playBtn.textContent = "▶ Play";
+        }
+        if (updateHash && location.hash !== "#" + tabId) {
+          history.replaceState(null, "", "#" + tabId);
+        }
+      }
+
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => showTab(btn.dataset.tab, true));
+      });
+
+      window.addEventListener("hashchange", () => {
+        showTab(location.hash.replace("#", ""), false);
+      });
+
+      const video = document.getElementById("bossReviewVideo");
+      const playBtn = document.getElementById("demoPlayBtn");
+      const replayBtn = document.getElementById("demoReplayBtn");
+      const prevBtn = document.getElementById("demoPrevBtn");
+      const nextBtn = document.getElementById("demoNextBtn");
+      const progress = document.getElementById("demoProgress");
+      const progressBar = document.getElementById("demoProgressBar");
+      const timeEl = document.getElementById("demoTime");
+      const chapterList = document.getElementById("chapterList");
+      const stepLabel = document.getElementById("demoStepLabel");
+      const nowTitle = document.getElementById("demoNowTitle");
+      const nowSub = document.getElementById("demoNowSub");
+
+      showTab(location.hash.replace("#", ""), false);
+
+      let chapters = FALLBACK_CHAPTERS;
+      let activeIndex = 0;
+      let resumeAfterSeek = false;
+
+      function fmt(sec) {
+        if (!isFinite(sec)) return "0:00";
+        const s = Math.max(0, Math.floor(sec));
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return m + ":" + String(r).padStart(2, "0");
+      }
+
+      function chapterIndexAt(t) {
+        let idx = 0;
+        for (let i = 0; i < chapters.length; i++) {
+          if (t + 0.05 >= chapters[i].start) idx = i;
+        }
+        return idx;
+      }
+
+      function setActiveChapter(idx, opts) {
+        activeIndex = Math.max(0, Math.min(chapters.length - 1, idx));
+        const ch = chapters[activeIndex];
+        nowTitle.textContent = ch.title;
+        nowSub.textContent = ch.subtitle;
+        stepLabel.textContent = "Step " + (activeIndex + 1) + " of " + chapters.length;
+        chapterList.querySelectorAll(".chapter-btn").forEach((btn, i) => {
+          btn.classList.toggle("active", i === activeIndex);
+        });
+        if (opts && opts.seek) {
+          resumeAfterSeek = !video.paused;
+          video.currentTime = ch.start + 0.05;
+          if (resumeAfterSeek) {
+            video.play().catch(() => {});
+          }
+        }
+      }
+
+      function renderChapters() {
+        chapterList.innerHTML = "";
+        chapters.forEach((ch, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "chapter-btn" + (i === activeIndex ? " active" : "");
+          btn.innerHTML =
+            '<div class="chapter-num">' + (i + 1) + "</div>" +
+            '<div><div class="chapter-title">' + ch.title.replace(/</g, "&lt;") + "</div>" +
+            '<div class="chapter-sub">' + ch.subtitle.replace(/</g, "&lt;") + "</div></div>";
+          btn.addEventListener("click", () => {
+            setActiveChapter(i, { seek: true });
+            video.play().catch(() => {});
+            playBtn.textContent = "⏸ Pause";
+          });
+          chapterList.appendChild(btn);
+        });
+      }
+
+      function syncFromVideo() {
+        const t = video.currentTime || 0;
+        const dur = video.duration || 36.7;
+        progressBar.style.width = Math.min(100, (t / dur) * 100) + "%";
+        timeEl.textContent = fmt(t) + " / " + fmt(dur);
+        const idx = chapterIndexAt(t);
+        if (idx !== activeIndex) setActiveChapter(idx, { seek: false });
+      }
+
+      playBtn.addEventListener("click", () => {
+        if (video.paused) {
+          video.play().catch(() => {});
+          playBtn.textContent = "⏸ Pause";
+        } else {
+          video.pause();
+          playBtn.textContent = "▶ Play";
+        }
+      });
+
+      replayBtn.addEventListener("click", () => {
+        setActiveChapter(0, { seek: true });
+        video.play().catch(() => {});
+        playBtn.textContent = "⏸ Pause";
+      });
+
+      prevBtn.addEventListener("click", () => {
+        setActiveChapter(activeIndex - 1, { seek: true });
+        video.play().catch(() => {});
+        playBtn.textContent = "⏸ Pause";
+      });
+
+      nextBtn.addEventListener("click", () => {
+        setActiveChapter(activeIndex + 1, { seek: true });
+        video.play().catch(() => {});
+        playBtn.textContent = "⏸ Pause";
+      });
+
+      progress.addEventListener("click", (e) => {
+        const rect = progress.getBoundingClientRect();
+        const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        const dur = video.duration || 36.7;
+        video.currentTime = ratio * dur;
+        syncFromVideo();
+      });
+
+      video.addEventListener("timeupdate", syncFromVideo);
+      video.addEventListener("loadedmetadata", syncFromVideo);
+      video.addEventListener("play", () => { playBtn.textContent = "⏸ Pause"; });
+      video.addEventListener("pause", () => { playBtn.textContent = "▶ Play"; });
+      video.addEventListener("ended", () => {
+        playBtn.textContent = "▶ Play";
+        setActiveChapter(chapters.length - 1, { seek: false });
+      });
+
+      // Auto-start when boss lands on #for-bosses (muted first for browser policy, then unmute on play click)
+      async function boot() {
+        try {
+          const res = await fetch("assets/boss-review-chapters.json?t=" + Date.now());
+          if (res.ok) {
+            const data = await res.json();
+            if (data.chapters && data.chapters.length) chapters = data.chapters;
+          }
+        } catch (e) {
+          /* use fallback */
+        }
+        renderChapters();
+        setActiveChapter(0, { seek: false });
+
+        const onBossTab = !location.hash || location.hash === "#for-bosses";
+        if (onBossTab) {
+          // Try muted autoplay so the demo starts immediately for bosses
+          video.muted = true;
+          video.play().then(() => {
+            playBtn.textContent = "⏸ Pause (unmute ▸)";
+            playBtn.addEventListener("click", function unmuteOnce() {
+              video.muted = false;
+              playBtn.removeEventListener("click", unmuteOnce);
+            }, { once: true });
+          }).catch(() => {});
+        }
+      }
+
+      boot();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "fps": 30,
+  "duration": 36.7,
+  "chapters": [
+    {
+      "id": "intro",
+      "start": 0.0,
+      "title": "Open the live board \u2014 just read, no editing",
+      "subtitle": "Do not click Manage / Record Work. Scan top \u2192 bottom in about 2 minutes."
+    },
+    {
+      "id": "bandwidth",
+      "start": 3.2,
+      "title": "1 \u00b7 Current Bandwidth",
+      "subtitle": "Available, Focused, or Fire drill \u2014 know capacity before asking for more work."
+    },
+    {
+      "id": "split",
+      "start": 7.2,
+      "title": "2 \u00b7 Workload Split Bar",
+      "subtitle": "See how active work is split across Boss A / B / C. You share this bandwidth."
+    },
+    {
+      "id": "filters",
+      "start": 11.7,
+      "title": "3 \u00b7 Filter by your name",
+      "subtitle": "Optional: click your boss tab to hide other teams and see only your requests."
+    },
+    {
+      "id": "doing",
+      "start": 15.2,
+      "title": "4 \u00b7 Doing Right Now",
+      "subtitle": "Active focus today \u2014 kept to 1\u20132 items so delivery finishes faster."
+    },
+    {
+      "id": "card",
+      "start": 19.2,
+      "title": "5 \u00b7 Read one work card",
+      "subtitle": "Boss tag \u00b7 Priority \u00b7 Mini progress \u00b7 Title \u00b7 ETA. One glance = full status."
+    },
+    {
+      "id": "blocked",
+      "start": 23.7,
+      "title": "6 \u00b7 Blocked / Waiting",
+      "subtitle": "Paused for access, decision, or reply. If it is you \u2014 answer to unblock."
+    },
+    {
+      "id": "queue",
+      "start": 27.7,
+      "title": "7 \u00b7 Up Next (#1 is next)",
+      "subtitle": "Need yours sooner? Ask to swap with #1 \u2014 not \u201care you free?\u201d"
+    },
+    {
+      "id": "outro",
+      "start": 32.7,
+      "title": "8 \u00b7 Future Vault, then Recently Completed",
+      "subtitle": "Long-term work has a date and alarm. The Done row is proof it was delivered."
+    }
+  ]
+}
